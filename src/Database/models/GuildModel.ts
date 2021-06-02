@@ -37,7 +37,7 @@ const GuildModel = new Schema({
 
 const Model = {
     collection: model("Guild", GuildModel),
-    name: "ActionLog"
+    name: "Guild"
 };
 
 export default Model;

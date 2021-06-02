@@ -5,11 +5,14 @@ import { Config as BotConfig } from "../../config";
 import { Util } from "../utils/Util";
 import { EventDispatcher as InternalEventDispatcher } from "./EventDispatcher";
 import { Logger } from "../utils/Logger";
+import { CommandManager } from "./CommandManager";
+import { CommandDispatcher } from "./CommandDispatcher";
 
 class Weeknd extends Client {
     public database: Database;
     public config = BotConfig;
     public logger: Logger;
+    public commands: CommandManager;
 
     constructor() {
         super({
@@ -27,6 +30,7 @@ class Weeknd extends Client {
 
         this.database = new Database(this);
         this.logger = new Logger(null);
+        this.commands = new CommandManager(this);
 
         Util.hideProp(this, "config");
     }
@@ -42,6 +46,32 @@ class Weeknd extends Client {
             this.on(event.name, (...args) => event.execute(...args));
 
             this.logger.success(`Loaded event ${event.name}`);
+        }
+    }
+
+    async loadCommands() {
+        const CommandsDir = await fs.readdir(this.config.COMMANDS_DIR);
+
+        for (const commandCategory of CommandsDir) {
+            const commands = await fs.readdir(`${this.config.COMMANDS_DIR}/${commandCategory}`);
+
+            for (const command of commands) {
+                const path = `${this.config.COMMANDS_DIR}/${commandCategory}/${command}`;
+                const commandFile = (await import(path).then((x) => x.default ?? x)) as typeof CommandDispatcher;
+                const commandDispatcher = new commandFile(this);
+
+                // define additional props
+                commandDispatcher.configure({
+                    category: commandCategory,
+                    location: path
+                });
+
+                this.commands.register(commandDispatcher.name, commandDispatcher);
+
+                commandDispatcher.config.aliases!.forEach((alias) => this.commands.register(alias, commandDispatcher.name));
+
+                this.logger.success(`Loaded command ${commandDispatcher.name}`);
+            }
         }
     }
 

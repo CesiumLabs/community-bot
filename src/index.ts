@@ -10,7 +10,9 @@ config();
 weeknd.logger.success("Loaded ENV!");
 
 const start = async () => {
+    // init bot
     await weeknd.loadEvents();
+    await weeknd.loadCommands();
     await weeknd.login();
 };
 
