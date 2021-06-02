@@ -31,7 +31,8 @@ class Database extends EventEmitter {
         return connect(process.env.MONGODB_URL!, {
             useCreateIndex: true,
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useFindAndModify: true
         });
     }
 

@@ -13,7 +13,7 @@ class MessageEvent extends EventDispatcher {
         if (!command) return;
 
         if (command.config.private && !(message.author as any).isDev()) return message.reply(`❌ | Missing permissions: \`BOT_DEVELOPER\`!`);
-        if (!message.member?.permissions.has(command.config.permissions!))
+        if (!(message.author as any).isDev() && !message.member?.permissions.has(command.config.permissions!))
             return message.reply(`❌ | Missing permissions: ${(command.config.permissions as string[])!.map((m: string) => `\`${m}\``).join(", ")}!`);
 
         try {
