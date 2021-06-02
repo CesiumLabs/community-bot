@@ -1,5 +1,5 @@
 import { model, Schema, SchemaTypes } from "mongoose";
-import { Util } from "../../utils/Util";
+import { Config } from "../../../config";
 
 const GuildModel = new Schema({
     id: {
@@ -11,7 +11,7 @@ const GuildModel = new Schema({
         // command prefix
         type: SchemaTypes.String,
         required: false,
-        default: "-"
+        default: Config.DEFAULT_PREFIX
     },
     logChannel: {
         // logs channel id
