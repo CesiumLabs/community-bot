@@ -1,8 +1,15 @@
-import { Client, Intents } from "discord.js";
+import { Client, ClientEvents, Intents } from "discord.js";
 import { Database } from "../Database/Database";
+import { promises as fs } from "fs";
+import { Config as BotConfig } from "../../config";
+import { Util } from "../utils/Util";
+import { EventDispatcher as InternalEventDispatcher } from "./EventDispatcher";
+import { Logger } from "../utils/Logger";
 
 class Weeknd extends Client {
-    database: Database;
+    public database: Database;
+    public config = BotConfig;
+    public logger: Logger;
 
     constructor() {
         super({
@@ -19,13 +26,27 @@ class Weeknd extends Client {
         });
 
         this.database = new Database(this);
+        this.logger = new Logger(null);
+
+        Util.hideProp(this, "config");
+    }
+
+    async loadEvents() {
+        // Discord Events
+        const DiscordEvent = await fs.readdir(this.config.EVENTS.DISCORD_EVENTS);
+
+        for (const eventFile of DiscordEvent) {
+            const EventDispatcher = (await import(`${this.config.EVENTS.DISCORD_EVENTS}/${eventFile}`).then((e) => e.default ?? e)) as typeof InternalEventDispatcher;
+            const event = new EventDispatcher(this, eventFile.split(".").shift()! as keyof ClientEvents);
+
+            this.on(event.name, (...args) => event.execute(...args));
+
+            this.logger.success(`Loaded event ${event.name}`);
+        }
     }
 
     async login(): Promise<string> {
-        return await Promise.all([
-            super.login(process.env.DISCORD_TOKEN),
-            this.database.connect()
-        ]).then((pm) => pm[0]);
+        return await Promise.all([super.login(process.env.DISCORD_TOKEN), this.database.connect()]).then((pm) => pm[0]);
     }
 }
 

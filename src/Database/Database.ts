@@ -6,7 +6,7 @@ import { Util } from "../utils/Util";
 import { Collection } from "discord.js";
 
 class Database extends EventEmitter {
-    connection!: Connection;
+    connection: Connection;
     models = new Collection<string, Model<any, any, any>>();
     client: Weeknd;
 
@@ -21,14 +21,13 @@ class Database extends EventEmitter {
         this.models.set(XpModel.name, XpModel.collection);
         this.models.set(StarboardModel.name, StarboardModel.collection);
 
+        this.connection = connection;
         this.connection.on("open", this.emit.bind(this, "ready"));
 
         Util.hideProp(this, "client");
     }
 
     connect() {
-        this.connection = connection;
-
         return connect(process.env.MONGODB_URL!, {
             useCreateIndex: true,
             useNewUrlParser: true,

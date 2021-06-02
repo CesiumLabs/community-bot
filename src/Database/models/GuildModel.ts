@@ -1,8 +1,6 @@
 import { model, Schema, SchemaTypes } from "mongoose";
 import { Util } from "../../utils/Util";
 
-const config = Util.parseYAML("./config.yml");
-
 const GuildModel = new Schema({
     id: {
         // guild id
@@ -13,7 +11,7 @@ const GuildModel = new Schema({
         // command prefix
         type: SchemaTypes.String,
         required: false,
-        default: config.prefix as string
+        default: "-"
     },
     logChannel: {
         // logs channel id

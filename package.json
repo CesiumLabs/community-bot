@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "build": "rimraf lib && tsc",
-    "start": "cd lib && cross-env NODE_ENV=production && node index.js",
-    "dev": "cross-env NODE_ENV=development && ts-node index.ts",
+    "start": "cd lib && cross-env NODE_ENV=production node src/index.js",
+    "dev": "cross-env NODE_ENV=development ts-node src/index.ts",
     "prettier": "prettier --write **/*.{js,ts,json,yml,yaml}"
   },
   "repository": {
@@ -43,8 +43,7 @@
     "express": "^4.17.1",
     "mongoose": "^5.12.12",
     "node-fetch": "^2.6.1",
-    "turndown": "^7.0.0",
-    "yaml": "^1.10.2"
+    "turndown": "^7.0.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.3",
