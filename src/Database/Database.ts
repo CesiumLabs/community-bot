@@ -3,10 +3,11 @@ import { EventEmitter } from "events";
 import { ActionLogModel, GuildModel, TagsModel, XpModel, StarboardModel } from "./models/index";
 import { Weeknd } from "../Base/Weeknd";
 import { Util } from "../utils/Util";
+import { Collection } from "discord.js";
 
 class Database extends EventEmitter {
     connection!: Connection;
-    models = new Map<string, Model<any, any, any>>();
+    models = new Collection<string, Model<any, any, any>>();
     client: Weeknd;
 
     constructor(client: Weeknd) {
