@@ -20,7 +20,7 @@ class SetPrefixCommand extends CommandDispatcher {
         if (!prefix) return message.reply(`✅ | Current prefix is **\`${Util.escapeMarkdown(await (message.guild as any).prefix())}\`**!`);
         if (prefix.length > 7) return message.reply("❌ | Prefix must be less than or equal to 7 characters!");
 
-        await this.client.database.models.get("Guild")!.findOneAndUpdate({ id: message.guild!.id }, { prefix: prefix });
+        await this.client.database.models.get("Guild")!.findOneAndUpdate({ id: message.guild!.id }, { prefix: prefix === "reset" ? this.client.config.DEFAULT_PREFIX : prefix });
         const newPrefix = await (message.guild as any).prefix(true);
 
         message.channel.send(`✅ | Prefix set to **\`${Util.escapeMarkdown(newPrefix)}\`**`);
