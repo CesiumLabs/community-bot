@@ -7,12 +7,14 @@ import { EventDispatcher as InternalEventDispatcher } from "./EventDispatcher";
 import { Logger } from "../utils/Logger";
 import { CommandManager } from "./CommandManager";
 import { CommandDispatcher } from "./CommandDispatcher";
+import { ClientUtils } from "./ClientUtils";
 
 class Weeknd extends Client {
     public database: Database;
     public config = BotConfig;
     public logger: Logger;
     public commands: CommandManager;
+    public utils: ClientUtils;
 
     constructor() {
         super({
@@ -31,6 +33,7 @@ class Weeknd extends Client {
         this.database = new Database(this);
         this.logger = new Logger(null);
         this.commands = new CommandManager(this);
+        this.utils = new ClientUtils(this);
 
         Util.hideProp(this, "config");
     }
