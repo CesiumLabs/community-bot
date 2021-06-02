@@ -1,0 +1,2 @@
+prefix: ["-"] # Default command prefix
+devMode: true # Development mode
