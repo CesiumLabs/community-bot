@@ -21,7 +21,7 @@ class Weeknd extends Client {
         this.database = new Database(this);
     }
 
-    async login() {
+    async login(): Promise<string> {
         return await Promise.all([
             super.login(process.env.DISCORD_TOKEN),
             this.database.connect()
