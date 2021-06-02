@@ -1,6 +1,7 @@
 import { Structures } from "discord.js";
 import { Weeknd } from "../Base/Weeknd";
 import { CacheStorage } from "../Database/CacheStorage";
+import { isEmpty } from "lodash";
 
 Structures.extend("Guild", (Extender) => {
     return class extends Extender {
@@ -20,11 +21,16 @@ Structures.extend("Guild", (Extender) => {
             return prefix;
         }
 
-        async register() {
+        async register(force: boolean = false) {
+            if (!force && !isEmpty(this.store.get(this.id))) return this.store.get(this.id);
+
             const model = (this.client as Weeknd).database.models.get("Guild")!;
             const existing = await model.findOne({ id: this.id });
 
-            if (existing) return existing;
+            if (existing) {
+                this.store.set(this.id, existing);
+                return existing;
+            }
 
             const doc = new model({
                 id: this.id
@@ -32,6 +38,7 @@ Structures.extend("Guild", (Extender) => {
 
             await doc.save();
 
+            this.store.set(this.id, doc);
             return doc;
         }
     };
