@@ -13,5 +13,4 @@ class Util {
     }
 }
 
-export default Util;
 export { Util };
