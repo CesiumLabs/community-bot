@@ -1,2 +1,2 @@
 # Community Bot
-A community Discord bot maintained by **Snowflake Studio ❄**
+A community Discord bot maintained by **[Snowflake Studio ❄](https://snowflakedev.xyz)**
