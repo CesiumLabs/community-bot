@@ -28,6 +28,10 @@ class CacheStorage<V = any> {
     all() {
         return this.data.array();
     }
+
+    clear() {
+        this.data.clear();
+    }
 }
 
 export { CacheStorage };
