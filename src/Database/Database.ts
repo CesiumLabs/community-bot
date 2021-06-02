@@ -61,5 +61,4 @@ class Database extends EventEmitter {
     }
 }
 
-export default Database;
 export { Database };
