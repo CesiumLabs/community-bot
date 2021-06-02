@@ -36,7 +36,7 @@ class Database extends EventEmitter {
     }
 
     get state() {
-        switch(this.connection.readyState) {
+        switch (this.connection.readyState) {
             case 1:
                 return "connected";
             case 2:
@@ -58,8 +58,7 @@ class Database extends EventEmitter {
             resolve();
         });
     }
-
 }
 
 export default Database;
-export { Database }
+export { Database };

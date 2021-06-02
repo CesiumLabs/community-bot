@@ -1,20 +1,24 @@
 import { model, Schema, SchemaTypes } from "mongoose";
 
 const XpModel = new Schema({
-    id: { // user id
+    id: {
+        // user id
         type: SchemaTypes.String,
         required: true
     },
-    guild: { // guild id
+    guild: {
+        // guild id
         type: SchemaTypes.String,
         required: true
     },
-    level: { // level
+    level: {
+        // level
         type: SchemaTypes.Number,
         required: true,
         default: 0
     },
-    xp: { // xp
+    xp: {
+        // xp
         type: SchemaTypes.Number,
         required: true,
         default: 0

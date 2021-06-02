@@ -18,9 +18,8 @@ class Weeknd extends Client {
     }
 
     async login() {
-        return await Promise.all([super.login(process.env.DISCORD_TOKEN), this.database.connect()]).then(pm => pm[0]);
+        return await Promise.all([super.login(process.env.DISCORD_TOKEN), this.database.connect()]).then((pm) => pm[0]);
     }
-
 }
 
 export default Weeknd;
