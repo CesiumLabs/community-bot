@@ -31,7 +31,7 @@ class CommandManager {
         return typeof dispatcher === "string" ? (this.cache.get(dispatcher) as CommandDispatcher) : dispatcher;
     }
 
-    async reload(name: string) {
+    reload(name: string) {
         const command = this.resolve(name);
         if (!command) return false;
 
