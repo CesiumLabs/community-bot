@@ -8,7 +8,8 @@
     "build": "rimraf lib && tsc",
     "start": "cd lib && cross-env NODE_ENV=production node src/index.js",
     "dev": "cross-env NODE_ENV=development ts-node src/index.ts",
-    "prettier": "prettier --write **/*.{js,ts,json,yml,yaml}"
+    "prettier": "prettier --write **/*.{js,ts,json,yml,yaml}",
+    "format": "yarn prettier && git add . && git commit -m \"chore(prettier)\""
   },
   "repository": {
     "type": "git",
