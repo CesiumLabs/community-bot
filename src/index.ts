@@ -14,6 +14,7 @@ const start = async () => {
     await weeknd.loadEvents();
     await weeknd.loadCommands();
     await weeknd.login();
+    await weeknd.application?.fetch();
 };
 
 start();
