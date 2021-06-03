@@ -15,8 +15,12 @@ class MessageEvent extends EventDispatcher {
         const command = this.client.commands.resolve(commandName);
         if (!command) return;
 
-        if (cooldowns.has(`${command.name}_${message.author.id}`) && (command.config.cooldown! - (Date.now() - cooldowns.get(`${command.name}_${message.author.id}`)!)) > 0) {
-            return message.reply(`⛔ | Please wait for **${Math.ceil((command.config.cooldown! - (Date.now() - cooldowns.get(`${command.name}_${message.author.id}`)!)) / 1000)} second(s)** before using ${command.name}!`);
+        if (cooldowns.has(`${command.name}_${message.author.id}`) && command.config.cooldown! - (Date.now() - cooldowns.get(`${command.name}_${message.author.id}`)!) > 0) {
+            return message.reply(
+                `⛔ | Please wait for **${Math.ceil((command.config.cooldown! - (Date.now() - cooldowns.get(`${command.name}_${message.author.id}`)!)) / 1000)} second(s)** before using ${
+                    command.name
+                }!`
+            );
         }
 
         if (command.config.private && !(message.author as any).isDev()) return message.reply(`❌ | Missing permissions: \`BOT_DEVELOPER\`!`);
