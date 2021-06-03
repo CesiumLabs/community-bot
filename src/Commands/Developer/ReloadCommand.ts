@@ -18,7 +18,7 @@ class ReloadCommand extends CommandDispatcher {
     async execute(message: Message, args: string[]) {
         const commandName = args[0];
         const success = await this.client.commands.reload(commandName);
-        
+
         return message.reply(`${success ? "✅" : "❌"} | Reload ${success ? "Successful" : "Failed"}!`);
     }
 }
