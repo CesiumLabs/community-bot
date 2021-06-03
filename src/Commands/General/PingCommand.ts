@@ -12,7 +12,8 @@ class PingCommand extends CommandDispatcher {
             aliases: ["pong"],
             description: "How fast is the bot huH?",
             private: false,
-            permissions: []
+            permissions: [],
+            cooldown: 5000
         });
     }
 

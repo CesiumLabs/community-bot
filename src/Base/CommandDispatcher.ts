@@ -10,6 +10,7 @@ export interface CommandConfig {
     private?: boolean;
     category?: string;
     location?: string;
+    cooldown?: number;
 }
 
 class CommandDispatcher {
@@ -25,7 +26,8 @@ class CommandDispatcher {
             permissions: [],
             private: false,
             category: "Others",
-            location: `${__filename}`
+            location: `${__filename}`,
+            cooldown: 1000
         };
 
         Util.hideProp(this, "client");
