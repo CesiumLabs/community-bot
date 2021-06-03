@@ -1,6 +1,7 @@
 import { Weeknd } from "./Weeknd";
 import { Collection } from "discord.js";
 import { CommandDispatcher } from "./CommandDispatcher";
+import { Util } from "../utils/Util";
 
 class CommandManager {
     client: Weeknd;
@@ -28,6 +29,31 @@ class CommandManager {
     resolve(name: string) {
         const dispatcher = this.cache.get(name);
         return typeof dispatcher === "string" ? (this.cache.get(dispatcher) as CommandDispatcher) : dispatcher;
+    }
+
+    async reload(name: string) {
+        const command = this.resolve(name);
+        if (!command) return false;
+
+        const reImport = Util.safeRequire(command.location);
+        if (!reImport) return false;
+
+        // remove previous
+        this.unregister(command.name);
+        command.config.aliases?.forEach((alias) => this.unregister(alias));
+
+        // set new
+        const newCommand = new (reImport.default || reImport)(this.client) as CommandDispatcher;
+        
+        newCommand.configure({
+            location: command.location,
+            category: command.config.category
+        });
+
+        this.register(newCommand.name, newCommand);
+        newCommand.config.aliases?.forEach((alias: string) => this.register(alias, newCommand.name));
+
+        return true;
     }
 }
 

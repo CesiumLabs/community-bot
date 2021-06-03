@@ -2,7 +2,7 @@ import { EventDispatcher } from "../../Base/EventDispatcher";
 
 class ReadyEvent extends EventDispatcher {
     execute() {
-        this.client.logger.info(`[${new Date().toLocaleString()}] Logged in as ${this.client.user?.tag}!`);
+        this.client.logger.info(`Logged in as ${this.client.user?.tag}!`);
 
         void this.client.user?.setPresence({
             activities: [

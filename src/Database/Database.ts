@@ -32,7 +32,7 @@ class Database extends EventEmitter {
             useCreateIndex: true,
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            useFindAndModify: true
+            useFindAndModify: false
         });
     }
 
