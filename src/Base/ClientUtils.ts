@@ -1,11 +1,13 @@
 import { Util } from "../utils/Util";
 import { Weeknd } from "./Weeknd";
-import { UserResolvable, User, Guild, GuildMember, TextChannel, Message, CollectorFilter, MessageAdditions, MessageOptions, CollectorOptions, Collection } from "discord.js";
+import { UserResolvable, User, Guild, GuildMember, TextChannel, Message, CollectorFilter, MessageAdditions, MessageOptions, Collection, DMChannel, NewsChannel, MessageCollectorOptions } from "discord.js";
 
 interface Prompt {
     message: string | MessageAdditions | (MessageOptions & { split: false });
-    filter: CollectorFilter<[Message]>;
-    options: CollectorOptions;
+    filter?: CollectorFilter<[Message]>;
+    options?: MessageCollectorOptions;
+    delete?: boolean;
+    all?: boolean;
 }
 
 class ClientUtils {
@@ -55,17 +57,18 @@ class ClientUtils {
         } catch {}
     }
 
-    prompt(channel: TextChannel, options: Prompt) {
-        return new Promise<Message | null>(async (resolve) => {
+    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt & { all: true }): Promise<Collection<`${bigint}`, Message> | null>
+    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt & { all: false }): Promise<Message | null>
+    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt): Promise<(Message | null) | (Collection<`${bigint}`, Message> | null)> {
+        return new Promise(async (resolve) => {
             if (!options.filter) options.filter = () => true;
-            await channel.send(options.message);
+            const msg = await channel.send(options.message);
             const collector = channel.createMessageCollector(options.filter, options.options);
 
-            collector.on("collect", (collected: Collection<`${bigint}`, Message>) => {
-                resolve(collected.first()!);
+            collector.on("end", (collected: Collection<`${bigint}`, Message>, reason: string) => {
+                if (options.delete && msg.deletable) msg.delete();
+                resolve(options.all ? collected : collected.first()!);
             });
-
-            collector.on("end", () => resolve(null));
         });
     }
 }

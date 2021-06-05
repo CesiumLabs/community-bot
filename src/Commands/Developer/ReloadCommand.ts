@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, TextChannel } from "discord.js";
 import { CommandDispatcher } from "../../Base/CommandDispatcher";
 import { Weeknd } from "../../Base/Weeknd";
 
@@ -16,10 +16,27 @@ class ReloadCommand extends CommandDispatcher {
     }
 
     async execute(message: Message, args: string[]) {
-        const commandName = args[0];
+        let commandName = args[0];
+        if (!commandName) {
+            const response = await this.client.utils.prompt(message.channel, {
+                message: "❓ Enter a command name to reload!",
+                options: {
+                    time: 15000,
+                    idle: 15000,
+                    max: 1,
+                    dispose: true
+                },
+                filter: (m) => m.author.id === message.author.id,
+                delete: false,
+                all: false
+            });
+
+            commandName = response?.content!;
+        };
+
         const success = this.client.commands.reload(commandName);
 
-        return message.reply(`${success ? "✅" : "❌"} | Reload ${success ? "Successful" : "Failed"}!`);
+        return message.reply(`${success ? `✅ | Successfully reloaded **${commandName}** command` : "❌ | Reload failed"}!`);
     }
 }
 
