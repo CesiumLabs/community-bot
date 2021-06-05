@@ -15,7 +15,8 @@ import {
     NewsChannel,
     MessageCollectorOptions,
     MessageEmbed,
-    MessageReaction
+    MessageReaction,
+    ReactionCollectorOptions
 } from "discord.js";
 import utils from "util";
 
@@ -34,6 +35,16 @@ interface PaginateOptions {
     forwardEmoji?: string;
     pages: MessageEmbed[];
     filter?: CollectorFilter<[MessageReaction, User]>;
+}
+
+interface ReactionConfirmOptions {
+    message: string | MessageAdditions | (MessageOptions & { split: false });
+    filter?: CollectorFilter<[MessageReaction, User]>;
+    options?: ReactionCollectorOptions;
+    delete?: boolean;
+    confirmEmoji?: string;
+    cancelEmoji?: string;
+    channel: TextChannel | DMChannel | NewsChannel;
 }
 
 class ClientUtils {
@@ -156,6 +167,46 @@ class ClientUtils {
 
         return cpm;
     }
+
+    confirmReaction(options: ReactionConfirmOptions): Promise<boolean> {
+        return new Promise(async (resolve) => {
+            if (!options.cancelEmoji) options.cancelEmoji = "❌";
+            if (!options.confirmEmoji) options.confirmEmoji = "✅";
+            options.options = Object.assign({}, ({ time: 20000, max: 1 } as ReactionCollectorOptions), options.options);
+            if (!options.filter) options.filter = () => true;
+
+            const msg = await options.channel.send(options.message);
+            for (const emoji of [options.cancelEmoji, options.confirmEmoji]) await msg.react(emoji).catch(() => {});
+
+            const collector = msg.createReactionCollector(options.filter, options.options);
+
+            collector.once("collect", async (reaction, user) => {
+                if (![options.cancelEmoji, options.confirmEmoji].includes(reaction.emoji.name! ?? reaction.emoji.id ?? reaction.emoji)) return;
+                reaction.users.remove(user).catch(() => { });
+
+                switch(reaction.emoji.name) {
+                    case options.cancelEmoji:
+                        if (msg.deletable) {
+                            await msg.delete().catch(() => {});
+                            resolve(false);
+                        }
+                        break;
+                    case options.confirmEmoji:
+                        if (msg.deletable) {
+                            await msg.delete().catch(() => { });
+                            resolve(true);
+                        }
+                        break;
+                }
+
+                try { collector.stop(); } catch {}
+            });
+
+            collector.on("end", (_, reason) => {
+                if (reason.includes("time")) resolve(false);
+            });
+    });
+}
 }
 
 export { ClientUtils };
