@@ -43,7 +43,7 @@ class ViewTagCommand extends CommandDispatcher {
 
         await tagdb.findOneAndUpdate({ guild: tag.guild, id: tag.id }, { $inc: { "uses": 1 } }).catch(() => {});
 
-        message.channel.send(tag.content, { split: true });
+        message.channel.send(tag.content, { split: true, allowedMentions: { parse: [] } });
     }
 }
 

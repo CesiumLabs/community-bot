@@ -13,7 +13,12 @@ class MessageEvent extends EventDispatcher {
 
         const { commandName, args } = (await (message as any).args()) as { commandName: string; args: string[] };
         const command = this.client.commands.resolve(commandName);
-        if (!command) return;
+        if (!command) {
+            const tagdb = this.client.database.models.get("Tags")!;
+            const tag = await tagdb.findOne({ guild: message.guild!.id, id: commandName });
+            if (!tag) return;
+            return this.client.commands.resolve("tag")?.execute(message, [commandName]);
+        }
 
         if (cooldowns.has(`${command.name}_${message.author.id}`) && command.config.cooldown! - (Date.now() - cooldowns.get(`${command.name}_${message.author.id}`)!) > 0) {
             return message.reply(
