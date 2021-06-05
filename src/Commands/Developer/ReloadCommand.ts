@@ -22,7 +22,6 @@ class ReloadCommand extends CommandDispatcher {
                 message: "❓ Enter a command name to reload!",
                 options: {
                     time: 15000,
-                    idle: 15000,
                     max: 1,
                     dispose: true
                 },

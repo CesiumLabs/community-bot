@@ -13,7 +13,9 @@ import {
     Collection,
     DMChannel,
     NewsChannel,
-    MessageCollectorOptions
+    MessageCollectorOptions,
+    MessageEmbed,
+    MessageReaction
 } from "discord.js";
 import utils from "util";
 
@@ -23,6 +25,15 @@ interface Prompt {
     options?: MessageCollectorOptions;
     delete?: boolean;
     all?: boolean;
+}
+
+interface PaginateOptions {
+    timeout?: number;
+    channel: TextChannel | DMChannel | NewsChannel;
+    backEmoji?: string;
+    forwardEmoji?: string;
+    pages: MessageEmbed[];
+    filter?: CollectorFilter<[MessageReaction, User]>;
 }
 
 class ClientUtils {
@@ -98,7 +109,7 @@ class ClientUtils {
     }
 
     cleanText(text: string | any) {
-        if (typeof text !== "string") text = require("util").inspect(text, { depth: 1 });
+        if (typeof text !== "string") text = utils.inspect(text, { depth: 1 });
 
         text = text
             .replace(/`/g, "`" + String.fromCharCode(8203))
@@ -106,6 +117,44 @@ class ClientUtils {
             .replace(new RegExp(this.client.token!, "g") ?? "", "mfa.VkO_2G4Qv3T--NO--lWetW_tjND--TOKEN--QFTm6YGtzq9PH--4U--tG0");
 
         return text;
+    }
+
+    async paginateEmbed(options: PaginateOptions) {
+        if (!options.timeout) options.timeout = 60000;
+        if (!options.backEmoji) options.backEmoji = "⬅";
+        if (!options.forwardEmoji) options.forwardEmoji = "➡";
+        if (!options.filter) options.filter = () => true;
+
+        let currentPage = 0;
+        const cpm = await options.channel.send(options.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${options.pages.length}`));
+        for (const emoji of [options.backEmoji, options.forwardEmoji]) {
+            if (!(await cpm.react(emoji).catch(() => { }))) return cpm;
+        }
+
+        const collector = cpm.createReactionCollector(options.filter, { time: options.timeout });
+        
+        collector.on("collect", (reaction, user) => {
+            if (![options.backEmoji, options.forwardEmoji].includes(reaction.emoji.name! ?? reaction.emoji.id ?? reaction.emoji)) return;
+
+            reaction.users.remove(user).catch(() => {});
+
+            switch(reaction.emoji.name) {
+                case options.backEmoji:
+                    currentPage = currentPage > 0 ? --currentPage : options.pages.length - 1;
+                    break;
+                case options.forwardEmoji:
+                    currentPage = currentPage + 1 < options.pages.length ? ++currentPage : 0;
+                    break;
+            }
+
+            cpm.edit(options.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${options.pages.length}`))
+        });
+
+        collector.on("end", () => {
+            if (!cpm.deleted) cpm.reactions.removeAll().catch(() => {});
+        });
+
+        return cpm;
     }
 }
 

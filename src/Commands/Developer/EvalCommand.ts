@@ -22,7 +22,6 @@ class EvalCommand extends CommandDispatcher {
                 message: "❓ Write a code to eval",
                 options: {
                     time: 60000,
-                    idle: 60000,
                     max: 1,
                     dispose: true
                 },

@@ -26,6 +26,11 @@ const TagsModel = new Schema({
         // The guild id who owns this tag. If none, this tag will be global
         type: SchemaTypes.String,
         required: false // global tag if no guild id
+    },
+    content: {
+        // the tag content
+        type: SchemaTypes.String,
+        required: true
     }
 });
 
