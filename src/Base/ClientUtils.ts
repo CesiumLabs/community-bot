@@ -172,7 +172,7 @@ class ClientUtils {
         return new Promise(async (resolve) => {
             if (!options.cancelEmoji) options.cancelEmoji = "❌";
             if (!options.confirmEmoji) options.confirmEmoji = "✅";
-            options.options = Object.assign({}, ({ time: 20000, max: 1 } as ReactionCollectorOptions), options.options);
+            options.options = Object.assign({}, { time: 20000, max: 1 } as ReactionCollectorOptions, options.options);
             if (!options.filter) options.filter = () => true;
 
             const msg = await options.channel.send(options.message);
@@ -182,9 +182,9 @@ class ClientUtils {
 
             collector.once("collect", async (reaction, user) => {
                 if (![options.cancelEmoji, options.confirmEmoji].includes(reaction.emoji.name! ?? reaction.emoji.id ?? reaction.emoji)) return;
-                reaction.users.remove(user).catch(() => { });
+                reaction.users.remove(user).catch(() => {});
 
-                switch(reaction.emoji.name) {
+                switch (reaction.emoji.name) {
                     case options.cancelEmoji:
                         if (msg.deletable) {
                             await msg.delete().catch(() => {});
@@ -193,20 +193,22 @@ class ClientUtils {
                         break;
                     case options.confirmEmoji:
                         if (msg.deletable) {
-                            await msg.delete().catch(() => { });
+                            await msg.delete().catch(() => {});
                             resolve(true);
                         }
                         break;
                 }
 
-                try { collector.stop(); } catch {}
+                try {
+                    collector.stop();
+                } catch {}
             });
 
             collector.on("end", (_, reason) => {
                 if (reason.includes("time")) resolve(false);
             });
-    });
-}
+        });
+    }
 }
 
 export { ClientUtils };
