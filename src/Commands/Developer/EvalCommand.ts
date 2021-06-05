@@ -27,7 +27,7 @@ class EvalCommand extends CommandDispatcher {
                     dispose: true
                 },
                 all: false,
-                filter: m => m.author.id === message.author.id,
+                filter: (m) => m.author.id === message.author.id,
                 delete: false
             });
 
@@ -37,7 +37,7 @@ class EvalCommand extends CommandDispatcher {
         if (!code) return message.reply("❌ | Time's up, try again next time!");
 
         const flags = this.client.utils.commandFlags(code);
-        const awaiter = flags.find(x => "await" in x);
+        const awaiter = flags.find((x) => "await" in x);
         if (awaiter) code = code.replace("--await", "").trim();
 
         try {
