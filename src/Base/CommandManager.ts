@@ -46,8 +46,8 @@ class CommandManager {
         const newCommand = new (reImport.default || reImport)(this.client) as CommandDispatcher;
 
         newCommand.configure({
-            location: command.location,
-            category: command.config.category
+            location: command.location!,
+            category: command.config.category!
         });
 
         this.register(newCommand.name, newCommand);

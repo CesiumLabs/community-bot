@@ -1,4 +1,4 @@
-import { Client, ClientEvents, Intents } from "discord.js";
+import { Client, ClientEvents, Intents, Collection, Message } from "discord.js";
 import { Database } from "../Database/Database";
 import { promises as fs } from "fs";
 import { Config as BotConfig } from "../../config";
