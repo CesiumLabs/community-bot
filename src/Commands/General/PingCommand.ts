@@ -22,7 +22,7 @@ class PingCommand extends CommandDispatcher {
         await msg
             .edit(
                 stripIndent`
-        🏓 | Pong!
+        **🏓 | Pong!**
         > **Websocket Latency: \`${Math.round(this.client.ws.ping)}ms\`**
         > **REST: \`${msg.createdTimestamp - message.createdTimestamp}ms\`**
         `
