@@ -15,6 +15,7 @@ import {
     NewsChannel,
     MessageCollectorOptions
 } from "discord.js";
+import utils from "util";
 
 interface Prompt {
     message: string | MessageAdditions | (MessageOptions & { split: false });
@@ -84,6 +85,27 @@ class ClientUtils {
                 resolve(options.all ? collected : collected.first()!);
             });
         });
+    }
+
+    commandFlags(args: string[] | string) {
+        if (!Array.isArray(args)) args = args.split(" ");
+        const regex = /--([\wа-я]+)(\s([\wа-я]+))?/gi;
+
+        return (args.join(" ")!.match(regex) ?? []).map((el: string) => {
+            const [tag, val] = el.slice(2).split(" ");
+            return { [tag]: val ?? null };
+        });
+    }
+
+    cleanText(text: string | any) {
+        if (typeof text !== "string") text = require("util").inspect(text, { depth: 1 });
+
+        text = text
+            .replace(/`/g, "`" + String.fromCharCode(8203))
+            .replace(/@/, "@" + String.fromCharCode(8203))
+            .replace(new RegExp(this.client.token!, "g") ?? "", "mfa.VkO_2G4Qv3T--NO--lWetW_tjND--TOKEN--QFTm6YGtzq9PH--4U--tG0");
+
+        return text;
     }
 }
 
