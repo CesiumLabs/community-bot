@@ -17,9 +17,9 @@ class MessageEvent extends EventDispatcher {
 
         if (cooldowns.has(`${command.name}_${message.author.id}`) && command.config.cooldown! - (Date.now() - cooldowns.get(`${command.name}_${message.author.id}`)!) > 0) {
             return message.reply(
-                `⛔ | Please wait for **${Math.ceil((command.config.cooldown! - (Date.now() - cooldowns.get(`${command.name}_${message.author.id}`)!)) / 1000)} second(s)** before using ${
-                    command.name
-                }!`
+                `⛔ | Please wait for **${Math.ceil(
+                    (command.config.cooldown! - (Date.now() - cooldowns.get(`${command.name}_${message.author.id}`)!)) / 1000
+                )} second(s)** before using ${command.name}!`
             );
         }
 
