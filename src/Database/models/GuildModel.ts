@@ -32,6 +32,12 @@ const GuildModel = new Schema({
         // starboard channel id
         type: SchemaTypes.String,
         required: false
+    },
+    premiumType: {
+        // premium type
+        type: SchemaTypes.Number,
+        required: false,
+        default: 0 // 0 = false
     }
 });
 
