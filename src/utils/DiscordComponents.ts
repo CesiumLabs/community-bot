@@ -1,8 +1,4 @@
-import {
-    MessageActionRow as DiscordMessageActionRow,
-    MessageButton as DiscordMessageButton,
-    MessageButtonOptions
-} from "discord.js";
+import { MessageActionRow as DiscordMessageActionRow, MessageButton as DiscordMessageButton, MessageButtonOptions } from "discord.js";
 
 export type ElementType = "Root" | "MessageActionRow" | "MessageButton";
 export type Component<T = any> = (props?: T, children?: any) => MessageElement<T>;
@@ -53,7 +49,10 @@ export function fragment(props: null, components: MessageElement[]): DiscordMess
 
             if (child.props.customID) buttonComponent.setCustomID(child.props.customID);
             if (child.props.disabled) buttonComponent.setDisabled(child.props.disabled);
-            if (child.props.emoji) buttonComponent.setEmoji(!child.props.emoji.id ? child.props.emoji.name! : `<${child.props.emoji.animated ? "a" : ""}:${child.props.emoji.name}:${child.props.emoji.id}>`);
+            if (child.props.emoji)
+                buttonComponent.setEmoji(
+                    !child.props.emoji.id ? child.props.emoji.name! : `<${child.props.emoji.animated ? "a" : ""}:${child.props.emoji.name}:${child.props.emoji.id}>`
+                );
             if (child.props.label) buttonComponent.setLabel(child.props.label);
             if (child.props.style) buttonComponent.setStyle(child.props.style);
             if (child.props.url) buttonComponent.setURL(child.props.url);
