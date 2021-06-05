@@ -71,9 +71,9 @@ class ClientUtils {
         } catch {}
     }
 
-    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt & { all: true }): Promise<Collection<`${bigint}`, Message> | null>;
-    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt & { all: false }): Promise<Message | null>;
-    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt): Promise<(Message | null) | (Collection<`${bigint}`, Message> | null)> {
+    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt & { all: true }): Promise<Collection<`${bigint}`, Message> | undefined>;
+    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt & { all: false }): Promise<Message | undefined>;
+    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt): Promise<(Message | undefined) | (Collection<`${bigint}`, Message> | undefined)> {
         return new Promise(async (resolve) => {
             if (!options.filter) options.filter = () => true;
             const msg = await channel.send(options.message);
