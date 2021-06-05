@@ -18,8 +18,9 @@ class CreateTagCommand extends CommandDispatcher {
     }
 
     async execute(message: Message, args: string[]) {
-        let tagName = args.shift(), tagContent = args.join(" ");
-        
+        let tagName = args.shift(),
+            tagContent = args.join(" ");
+
         if (!tagName) {
             const response = await this.client.utils.prompt(message.channel, {
                 message: "✍ | Alright, enter your tag name. Write `cancel` to stop!",
@@ -29,7 +30,7 @@ class CreateTagCommand extends CommandDispatcher {
                     dispose: true
                 },
                 all: false,
-                filter: m => m.author.id === message.author.id
+                filter: (m) => m.author.id === message.author.id
             });
 
             if (!response || !response.content || response.content.toLowerCase() === "cancel") return message.reply("❌ | Looks like we are not creating a tag, try again later!");
@@ -45,11 +46,11 @@ class CreateTagCommand extends CommandDispatcher {
                     dispose: true
                 },
                 all: false,
-                filter: m => m.author.id === message.author.id
+                filter: (m) => m.author.id === message.author.id
             });
 
             if (!response || !response.content || response.content.toLowerCase() === "cancel") return message.reply("❌ | Looks like we are not creating a tag, try again later!");
-            
+
             tagContent = response.content;
         }
 
@@ -58,7 +59,7 @@ class CreateTagCommand extends CommandDispatcher {
 
         const tagdb = this.client.database.models.get("Tags")!;
         if (await tagdb.findOne({ guild: message.guild!.id, id: tagName })) return message.reply("❌ | That tag name is not available!");
-        
+
         const newTag = new tagdb({
             id: tagName,
             uses: 0,

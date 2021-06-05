@@ -17,7 +17,8 @@ class EditTagCommand extends CommandDispatcher {
     }
 
     async execute(message: Message, args: string[]) {
-        let tagName = args.shift(), tagContent = args.join(" ");
+        let tagName = args.shift(),
+            tagContent = args.join(" ");
 
         if (!tagName) {
             const response = await this.client.utils.prompt(message.channel, {
@@ -28,7 +29,7 @@ class EditTagCommand extends CommandDispatcher {
                     dispose: true
                 },
                 all: false,
-                filter: m => m.author.id === message.author.id
+                filter: (m) => m.author.id === message.author.id
             });
 
             if (!response || !response.content || response.content.toLowerCase() === "cancel") return message.reply("❌ | Looks like we are not editing a tag, try again later!");
@@ -44,7 +45,7 @@ class EditTagCommand extends CommandDispatcher {
                     dispose: true
                 },
                 all: false,
-                filter: m => m.author.id === message.author.id
+                filter: (m) => m.author.id === message.author.id
             });
 
             if (!response || !response.content || response.content.toLowerCase() === "cancel") return message.reply("❌ | Looks like we are not editing a tag, try again later!");

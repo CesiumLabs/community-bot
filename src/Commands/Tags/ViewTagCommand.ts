@@ -28,7 +28,7 @@ class ViewTagCommand extends CommandDispatcher {
                     dispose: true
                 },
                 all: false,
-                filter: m => m.author.id === message.author.id
+                filter: (m) => m.author.id === message.author.id
             });
 
             if (!response || !response.content) return message.reply("❌ | Looks like we are not viewing a tag!");
@@ -41,7 +41,7 @@ class ViewTagCommand extends CommandDispatcher {
         const tag = await tagdb.findOne({ guild: message.guild!.id, id: tagName });
         if (!tag) return message.reply("❌ | That tag is not available!");
 
-        await tagdb.findOneAndUpdate({ guild: tag.guild, id: tag.id }, { $inc: { "uses": 1 } }).catch(() => {});
+        await tagdb.findOneAndUpdate({ guild: tag.guild, id: tag.id }, { $inc: { uses: 1 } }).catch(() => {});
 
         message.channel.send(tag.content, { split: true, allowedMentions: { parse: [] } });
     }

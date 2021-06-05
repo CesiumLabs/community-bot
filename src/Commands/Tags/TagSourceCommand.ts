@@ -28,7 +28,7 @@ class TagSourceCommand extends CommandDispatcher {
                     dispose: true
                 },
                 all: false,
-                filter: m => m.author.id === message.author.id
+                filter: (m) => m.author.id === message.author.id
             });
 
             if (!response || !response.content) return message.reply("❌ | Looks like we are not viewing a tag!");

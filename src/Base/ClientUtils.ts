@@ -128,17 +128,17 @@ class ClientUtils {
         let currentPage = 0;
         const cpm = await options.channel.send(options.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${options.pages.length}`));
         for (const emoji of [options.backEmoji, options.forwardEmoji]) {
-            if (!(await cpm.react(emoji).catch(() => { }))) return cpm;
+            if (!(await cpm.react(emoji).catch(() => {}))) return cpm;
         }
 
         const collector = cpm.createReactionCollector(options.filter, { time: options.timeout });
-        
+
         collector.on("collect", (reaction, user) => {
             if (![options.backEmoji, options.forwardEmoji].includes(reaction.emoji.name! ?? reaction.emoji.id ?? reaction.emoji)) return;
 
             reaction.users.remove(user).catch(() => {});
 
-            switch(reaction.emoji.name) {
+            switch (reaction.emoji.name) {
                 case options.backEmoji:
                     currentPage = currentPage > 0 ? --currentPage : options.pages.length - 1;
                     break;
@@ -147,7 +147,7 @@ class ClientUtils {
                     break;
             }
 
-            cpm.edit(options.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${options.pages.length}`))
+            cpm.edit(options.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${options.pages.length}`));
         });
 
         collector.on("end", () => {

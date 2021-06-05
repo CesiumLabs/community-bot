@@ -35,12 +35,13 @@ class TagLeaderboard extends CommandDispatcher {
             );
         });
 
-        if (pages.length > 1) return this.client.utils.paginateEmbed({
-            pages,
-            filter: (_, user) => user.id === message.author!.id,
-            timeout: 30000,
-            channel: message.channel
-        });
+        if (pages.length > 1)
+            return this.client.utils.paginateEmbed({
+                pages,
+                filter: (_, user) => user.id === message.author!.id,
+                timeout: 30000,
+                channel: message.channel
+            });
 
         return message.channel.send(pages[0].setFooter(`Page ${pages.length} of ${pages.length}`));
     }
