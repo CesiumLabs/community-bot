@@ -42,15 +42,17 @@ class DeleteTagCommand extends CommandDispatcher {
             .setColor("YELLOW")
             .setFooter("You have 15 seconds to confirm.")
             .setDescription("You can't undo this process.\n\n✅ Yes | ❌ No");
-        
-        const confirm = await this.client.utils.confirmReaction({
-            message: embed,
-            channel: message.channel,
-            options: {
-                time: 15000
-            },
-            filter: (_, user) => user.id === message.author.id
-        }).catch(() => {});
+
+        const confirm = await this.client.utils
+            .confirmReaction({
+                message: embed,
+                channel: message.channel,
+                options: {
+                    time: 15000
+                },
+                filter: (_, user) => user.id === message.author.id
+            })
+            .catch(() => {});
 
         if (!confirm) return message.reply("❌ | Cancelled!");
 
