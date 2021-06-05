@@ -176,7 +176,7 @@ class ClientUtils {
             if (!options.filter) options.filter = () => true;
 
             const msg = await options.channel.send(options.message);
-            for (const emoji of [options.cancelEmoji, options.confirmEmoji]) await msg.react(emoji).catch(() => {});
+            for (const emoji of [options.confirmEmoji, options.cancelEmoji]) await msg.react(emoji).catch(() => {});
 
             const collector = msg.createReactionCollector(options.filter, options.options);
 

@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import { CommandDispatcher } from "../../Base/CommandDispatcher";
 import { Weeknd } from "../../Base/Weeknd";
 
@@ -36,6 +36,23 @@ class DeleteTagCommand extends CommandDispatcher {
         }
 
         tagName = tagName.toLowerCase();
+
+        const embed = new MessageEmbed()
+            .setTitle(`Do you really want to delete tag ${tagName}?`)
+            .setColor("YELLOW")
+            .setFooter("You have 15 seconds to confirm.")
+            .setDescription("You can't undo this process.\n\n✅ Yes | ❌ No");
+        
+        const confirm = await this.client.utils.confirmReaction({
+            message: embed,
+            channel: message.channel,
+            options: {
+                time: 15000
+            },
+            filter: (_, user) => user.id === message.author.id
+        }).catch(() => {});
+
+        if (!confirm) return message.reply("❌ | Cancelled!");
 
         const tagdb = this.client.database.models.get("Tags")!;
         const tag = await tagdb.findOneAndDelete({ guild: message.guild!.id, id: tagName }).catch(() => {});
