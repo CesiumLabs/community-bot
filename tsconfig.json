@@ -7,7 +7,10 @@
         "strict": true,
         "strictNullChecks": true,
         "esModuleInterop": true,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "jsxFactory": "DiscordComponents.createComponent",
+        "jsx": "react",
+        "jsxFragmentFactory": "fragment"
     },
     "include": [
         "src/**/*"
