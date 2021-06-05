@@ -1,6 +1,20 @@
 import { Util } from "../utils/Util";
 import { Weeknd } from "./Weeknd";
-import { UserResolvable, User, Guild, GuildMember, TextChannel, Message, CollectorFilter, MessageAdditions, MessageOptions, Collection, DMChannel, NewsChannel, MessageCollectorOptions } from "discord.js";
+import {
+    UserResolvable,
+    User,
+    Guild,
+    GuildMember,
+    TextChannel,
+    Message,
+    CollectorFilter,
+    MessageAdditions,
+    MessageOptions,
+    Collection,
+    DMChannel,
+    NewsChannel,
+    MessageCollectorOptions
+} from "discord.js";
 
 interface Prompt {
     message: string | MessageAdditions | (MessageOptions & { split: false });
@@ -57,8 +71,8 @@ class ClientUtils {
         } catch {}
     }
 
-    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt & { all: true }): Promise<Collection<`${bigint}`, Message> | null>
-    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt & { all: false }): Promise<Message | null>
+    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt & { all: true }): Promise<Collection<`${bigint}`, Message> | null>;
+    prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt & { all: false }): Promise<Message | null>;
     prompt(channel: TextChannel | DMChannel | NewsChannel, options: Prompt): Promise<(Message | null) | (Collection<`${bigint}`, Message> | null)> {
         return new Promise(async (resolve) => {
             if (!options.filter) options.filter = () => true;

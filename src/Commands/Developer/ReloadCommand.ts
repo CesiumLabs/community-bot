@@ -32,7 +32,7 @@ class ReloadCommand extends CommandDispatcher {
             });
 
             commandName = response?.content!;
-        };
+        }
 
         const success = this.client.commands.reload(commandName);
 
