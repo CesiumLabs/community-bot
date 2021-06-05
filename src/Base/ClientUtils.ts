@@ -1,6 +1,12 @@
 import { Util } from "../utils/Util";
 import { Weeknd } from "./Weeknd";
-import { UserResolvable, User, Guild, GuildMember } from "discord.js";
+import { UserResolvable, User, Guild, GuildMember, TextChannel, Message, CollectorFilter, MessageAdditions, MessageOptions, CollectorOptions, Collection } from "discord.js";
+
+interface Prompt {
+    message: string | MessageAdditions | (MessageOptions & { split: false });
+    filter: CollectorFilter<[Message]>;
+    options: CollectorOptions;
+}
 
 class ClientUtils {
     client: Weeknd;
@@ -47,6 +53,20 @@ class ClientUtils {
 
             return multi ? arr : arr[0];
         } catch {}
+    }
+
+    prompt(channel: TextChannel, options: Prompt) {
+        return new Promise<Message | null>(async (resolve) => {
+            if (!options.filter) options.filter = () => true;
+            await channel.send(options.message);
+            const collector = channel.createMessageCollector(options.filter, options.options);
+
+            collector.on("collect", (collected: Collection<`${bigint}`, Message>) => {
+                resolve(collected.first()!);
+            });
+
+            collector.on("end", () => resolve(null));
+        });
     }
 }
 

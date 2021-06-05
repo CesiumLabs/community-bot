@@ -28,6 +28,8 @@
   "homepage": "https://github.com/DevSnowflake/community-bot#readme",
   "devDependencies": {
     "@types/common-tags": "^1.8.0",
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.12",
     "@types/lodash": "^4.14.170",
     "@types/node": "^15.6.1",
     "@types/node-fetch": "^2.5.10",
@@ -40,9 +42,11 @@
   "dependencies": {
     "chalk": "^4.1.1",
     "common-tags": "^1.8.0",
+    "cors": "^2.8.5",
     "discord.js": "discordjs/discord.js",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "helmet": "^4.6.0",
     "lodash": "^4.17.21",
     "mongoose": "^5.12.12",
     "node-fetch": "^2.6.1",

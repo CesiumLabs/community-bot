@@ -6,5 +6,8 @@ export const Config = {
         DISCORD_EVENTS: `${__dirname}/src/Events/Discord`,
         DATABASE_EVENTS: `${__dirname}/src/Events/Database`
     },
-    COMMANDS_DIR: `${__dirname}/src/Commands`
+    COMMANDS_DIR: `${__dirname}/src/Commands`,
+    WEB_SERVER: {
+        PORT: process.env.PORT ?? 3000
+    }
 };
