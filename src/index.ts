@@ -1,6 +1,15 @@
 import { config } from "dotenv";
 import { weeknd } from "./bot";
+import fetch from "node-fetch";
 import "./Events/Process/ProcessEvents";
+
+// we need some globals, yay!
+Object.defineProperty(globalThis, "fetch", {
+    value: fetch,
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
 
 weeknd.logger.debug(`Application started, Node ENV ${process.env.NODE_ENV}!`);
 

@@ -3,7 +3,7 @@ import { EventDispatcher } from "../../Base/EventDispatcher";
 
 class InteractionEvent extends EventDispatcher {
     execute(interaction: Interaction) {
-        if (interaction.isCommand() || interaction.isMessageComponent()) return interaction.reply("Hello", { ephemeral: true });
+        if (interaction.isCommand() || interaction.isMessageComponent()) return void interaction.reply("You found me YAY!", { ephemeral: true });
     }
 }
 

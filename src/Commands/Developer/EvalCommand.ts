@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import DiscordJS from "discord.js";
 import { CommandDispatcher } from "../../Base/CommandDispatcher";
 import { Weeknd } from "../../Base/Weeknd";
 
@@ -15,7 +15,10 @@ class EvalCommand extends CommandDispatcher {
         });
     }
 
-    async execute(message: Message, args: string[]) {
+    async execute(message: DiscordJS.Message, args: string[]) {
+        // required
+        const Discord = DiscordJS;
+
         let code = args.join(" ");
         if (!code) {
             const response = await this.client.utils.prompt(message.channel, {
