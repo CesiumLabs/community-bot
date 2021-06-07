@@ -1,10 +1,8 @@
-import { Interaction } from "discord.js";
 import { EventDispatcher } from "../../Base/EventDispatcher";
+import { Interaction } from "discord.js";
 
 class InteractionEvent extends EventDispatcher {
-    execute(interaction: Interaction) {
-        if (interaction.isCommand() || interaction.isMessageComponent()) return void interaction.reply("You found me YAY!", { ephemeral: true });
-    }
+    execute(interaction: Interaction) { /* no-op for now */ }
 }
 
 export default InteractionEvent;

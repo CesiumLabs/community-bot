@@ -52,12 +52,12 @@ class DeleteTagCommand extends CommandDispatcher {
                 },
                 filter: (_, user) => user.id === message.author.id
             })
-            .catch(() => {});
+            .catch(() => { });
 
         if (!confirm) return message.reply("❌ | Cancelled!");
 
         const tagdb = this.client.database.models.get("Tags")!;
-        const tag = await tagdb.findOneAndDelete({ guild: message.guild!.id, id: tagName }).catch(() => {});
+        const tag = await tagdb.findOneAndDelete({ guild: message.guild!.id, id: tagName }).catch(() => { });
         if (!tag) return message.reply("❌ | Could not delete that tag!");
 
         message.reply(`✅ | Removed tag **${tagName}**`);

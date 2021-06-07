@@ -16,9 +16,13 @@ import {
     MessageCollectorOptions,
     MessageEmbed,
     MessageReaction,
-    ReactionCollectorOptions
+    ReactionCollectorOptions,
+    MessageComponentInteractionCollectorOptions,
+    MessageComponentInteractionCollector,
+    MessageComponentInteraction
 } from "discord.js";
 import utils from "util";
+import { DiscordComponents, fragment, MessageActionRow, MessageButton } from "discord.js-jsx-components";
 
 interface Prompt {
     message: string | MessageAdditions | (MessageOptions & { split: false });
@@ -45,6 +49,16 @@ interface ReactionConfirmOptions {
     confirmEmoji?: string;
     cancelEmoji?: string;
     channel: TextChannel | DMChannel | NewsChannel;
+}
+
+interface ButtonConfirmOptions {
+    message: MessageOptions;
+    filter?: CollectorFilter<[MessageComponentInteraction]>;
+    options?: MessageComponentInteractionCollectorOptions;
+    delete?: boolean;
+    channel: TextChannel | DMChannel | NewsChannel;
+    acceptID: string;
+    declineID: string;
 }
 
 class ClientUtils {
@@ -207,6 +221,44 @@ class ClientUtils {
             collector.on("end", (_, reason) => {
                 if (reason.includes("time")) resolve(false);
             });
+        });
+    }
+
+    // @todo: fix this
+    comfirmButton(options: ButtonConfirmOptions) {
+        return new Promise<{accepted: boolean, interaction: MessageComponentInteraction }>(async (resolve) => {
+            if (!options.filter) options.filter = () => true;
+            options.options = Object.assign({}, ({
+                time: 15000,
+                dispose: false
+            } as MessageComponentInteractionCollectorOptions), options.options);
+
+            const data = (
+                <>
+                    <MessageActionRow>
+                        <MessageButton style="DANGER" label="Confirm" customID={options.acceptID} />
+                        <MessageButton style="PRIMARY" label="Cancel" customID={options.declineID} />
+                    </MessageActionRow>
+                </>
+            );
+            
+            const msg = await options.channel.send({ ...options.message, components: data }) as Message;
+
+            const collector = options.channel.createMessageComponentInteractionCollector(options.filter, options.options);
+
+            collector.on("collect", (interaction) => {
+                const accepted = interaction.customID === options.acceptID;
+                if (options.delete && msg.deletable) msg.delete();
+                
+                resolve({ accepted, interaction });
+            });
+
+            collector.on("end", (collected) => {                
+                resolve({
+                    accepted: collected.first()?.customID === options.acceptID,
+                    interaction: collected.first()!
+                });
+            })
         });
     }
 }
