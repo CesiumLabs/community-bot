@@ -53,7 +53,7 @@ class TagInfoCommand extends CommandDispatcher {
             .setTimestamp()
             .setColor("RANDOM");
 
-        message.reply(embed);
+        message.reply({ embeds: [embed] });
     }
 }
 

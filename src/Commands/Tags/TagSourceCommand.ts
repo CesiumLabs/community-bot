@@ -41,7 +41,7 @@ class TagSourceCommand extends CommandDispatcher {
         const tag = await tagdb.findOne({ guild: message.guild!.id, id: tagName });
         if (!tag) return message.reply("❌ | That tag is not available!");
 
-        message.reply(this.sanitize(tag.content), { split: true, allowedMentions: { parse: [] } });
+        message.reply({ content: this.sanitize(tag.content), split: true, allowedMentions: { parse: [] } });
     }
 
     sanitize(txt: string) {

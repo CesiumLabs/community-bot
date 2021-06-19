@@ -43,7 +43,7 @@
     "chalk": "^4.1.1",
     "common-tags": "^1.8.0",
     "cors": "^2.8.5",
-    "discord.js": "^13.0.0-dev.f7e420bf290f5404e8b99b8896c63e178f77bbfc",
+    "discord.js": "^13.0.0-dev.807ea2d3c197c7c6556bd1c894114932f6657d49",
     "discord.js-jsx-components": "^1.0.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",

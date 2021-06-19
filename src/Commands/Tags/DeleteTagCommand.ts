@@ -45,7 +45,10 @@ class DeleteTagCommand extends CommandDispatcher {
 
         const confirm = await this.client.utils
             .confirmReaction({
-                message: embed,
+                message: {
+                    embeds: [embed],
+                    split: false
+                },
                 channel: message.channel,
                 options: {
                     time: 15000

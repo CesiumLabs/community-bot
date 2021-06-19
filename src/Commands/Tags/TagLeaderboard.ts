@@ -45,7 +45,9 @@ class TagLeaderboard extends CommandDispatcher {
             });
         }
 
-        return message.channel.send(pages[0].setFooter(`Page ${pages.length} of ${pages.length}`));
+        return message.channel.send({
+            embeds: [pages[0].setFooter(`Page ${pages.length} of ${pages.length}`)]
+        });
     }
 }
 

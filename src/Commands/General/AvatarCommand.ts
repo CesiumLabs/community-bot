@@ -45,7 +45,9 @@ class AvatarCommand extends CommandDispatcher {
             .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL())
             .setTimestamp();
 
-        return message.reply(embed);
+        return message.reply({
+            embeds: [embed]
+        });
     }
 }
 

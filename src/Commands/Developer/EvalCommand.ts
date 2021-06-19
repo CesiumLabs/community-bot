@@ -45,9 +45,9 @@ class EvalCommand extends CommandDispatcher {
         try {
             const ev = this.client.utils.cleanText(awaiter ? await eval(code) : eval(code));
 
-            return message.reply(ev, { code: "js", split: true });
+            return message.reply({ content: ev, code: "js", split: true });
         } catch (e) {
-            return message.reply(`${e}`, { code: "js", split: true });
+            return message.reply({ content: `${e}`, code: "js", split: true });
         }
     }
 }

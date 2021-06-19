@@ -8,7 +8,6 @@ import {
     TextChannel,
     Message,
     CollectorFilter,
-    MessageAdditions,
     MessageOptions,
     Collection,
     DMChannel,
@@ -18,14 +17,13 @@ import {
     MessageReaction,
     ReactionCollectorOptions,
     MessageComponentInteractionCollectorOptions,
-    MessageComponentInteractionCollector,
     MessageComponentInteraction
 } from "discord.js";
 import utils from "util";
 import { DiscordComponents, fragment, MessageActionRow, MessageButton } from "discord.js-jsx-components";
 
 interface Prompt {
-    message: string | MessageAdditions | (MessageOptions & { split: false });
+    message: string | (MessageOptions & { split: false });
     filter?: CollectorFilter<[Message]>;
     options?: MessageCollectorOptions;
     delete?: boolean;
@@ -42,7 +40,7 @@ interface PaginateOptions {
 }
 
 interface ReactionConfirmOptions {
-    message: string | MessageAdditions | (MessageOptions & { split: false });
+    message: string | (MessageOptions & { split: false });
     filter?: CollectorFilter<[MessageReaction, User]>;
     options?: ReactionCollectorOptions;
     delete?: boolean;
@@ -151,7 +149,9 @@ class ClientUtils {
         if (!options.filter) options.filter = () => true;
 
         let currentPage = 0;
-        const cpm = await options.channel.send(options.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${options.pages.length}`));
+        const cpm = await options.channel.send({
+            embeds: [options.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${options.pages.length}`)]
+        });
         for (const emoji of [options.backEmoji, options.forwardEmoji]) {
             if (!(await cpm.react(emoji).catch(() => {}))) return cpm;
         }
@@ -172,7 +172,9 @@ class ClientUtils {
                     break;
             }
 
-            cpm.edit(options.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${options.pages.length}`));
+            cpm.edit({
+                embeds: [options.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${options.pages.length}`)]
+            });
         });
 
         collector.on("end", () => {
@@ -242,7 +244,7 @@ class ClientUtils {
                 </>
             );
             
-            const msg = await options.channel.send({ ...options.message, components: data }) as Message;
+            const msg = await (options.channel as any).send({ ...options.message, components: data }) as Message;
 
             const collector = options.channel.createMessageComponentInteractionCollector(options.filter, options.options);
 
