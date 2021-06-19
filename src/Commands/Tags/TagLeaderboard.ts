@@ -23,17 +23,13 @@ class TagLeaderboard extends CommandDispatcher {
         const tags = await (user ? tagdb.find({ guild: message.guild!.id, author: user.id }) : tagdb.find({ guild: message.guild!.id }));
         if (!tags || !tags.length) return message.reply("❌ | Leaderboard is not available!");
 
-        const pages: MessageEmbed[] = [];
-
-        chunk(tags, 10).forEach((tag: any[]) => {
-            pages.push(
-                new MessageEmbed()
-                    .setAuthor(message.guild!.name, message.guild!.iconURL()!)
-                    .setTitle("Tags Leaderboard")
-                    .setDescription(tag.map((m: any, i: number) => `**${i + 1}.** ${m.id} - ${m.uses.toLocaleString()} uses`).join("\n"))
-                    .setColor("RANDOM")
-                    .setTimestamp()
-            );
+        const pages: MessageEmbed[] = chunk<any>(tags, 10).map((tag) => {
+            return new MessageEmbed()
+                .setAuthor(message.guild!.name, message.guild!.iconURL()!)
+                .setTitle("Tags Leaderboard")
+                .setDescription(tag.map((m: any, i: number) => `**${i + 1}.** ${m.id} - ${m.uses.toLocaleString()} uses`).join("\n"))
+                .setColor("RANDOM")
+                .setTimestamp();
         });
 
         if (pages.length > 1) {
