@@ -39,7 +39,7 @@ class LighthouseCommand extends CommandDispatcher {
 
         if (!this.buildURL(website)) return message.reply("❌ | Invalid url");
 
-        message.react("⏱").catch(() => {});
+        message.channel.startTyping().catch(() => {});
 
         fetch("https://lighthouse-dot-webdotdevsite.appspot.com//lh/newaudit", {
             method: "POST",
@@ -75,7 +75,7 @@ class LighthouseCommand extends CommandDispatcher {
                 message.reply("❌ | Could not Audit");
             })
             .finally(() => {
-                message.reactions.removeAll().catch(() => {});
+                message.channel.stopTyping(true);
             });
     }
 
@@ -92,6 +92,7 @@ class LighthouseCommand extends CommandDispatcher {
             return null;
         }
     }
+
     makeCanvas(perf: number, acc: number, bp: number, seo: number) {
         const canvas = createCanvas(800, 400);
         const ctx = canvas.getContext("2d");
@@ -129,6 +130,7 @@ class LighthouseCommand extends CommandDispatcher {
         else if (i >= 90) return ["#18b663", "#d1f1e0"];
         return ["red", "#fad7d7"];
     }
+
     drawCircle(x: number, y: number, rad: number, eAngle: number, borderColor: string, lightBorderColor: string, ctx: CanvasRenderingContext2D) {
         ctx.beginPath();
         ctx.arc(x, y, rad, 0, 2 * Math.PI);
@@ -144,6 +146,7 @@ class LighthouseCommand extends CommandDispatcher {
         ctx.stroke();
         ctx.closePath();
     }
+
     writeTextInsideCircle(x: number, y: number, text: string, color: string, ctx: CanvasRenderingContext2D) {
         ctx.font = "bold 30px sans-serif";
         ctx.fillStyle = color;
