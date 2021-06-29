@@ -66,8 +66,6 @@ class LighthouseCommand extends CommandDispatcher {
                     seo: this.calculate(data.lhrSlim.find((x: any) => x.id === "seo").score)
                 };
 
-                const score = (m: number) => (m < 50 ? "🟥" : m > 49 && m < 90 ? "🟨" : "🟩");
-                const sc = Object.values(lhdata).filter((x) => x < 49).length;
                 const attachment = this.makeCanvas(lhdata.perf, lhdata.acc, lhdata.bp, lhdata.seo);
                 message.reply({
                     files: [{ attachment, name: "lighthouse.png" }]
